@@ -1,11 +1,5 @@
 package smallest
 
-import "sort"
-
-func Solution(A []int) int {
-
-	sort.Ints(A)
-
-	set
+func Solution(A int, B int, C int) int {
+	return 0
 }
-
