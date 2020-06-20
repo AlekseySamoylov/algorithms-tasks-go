@@ -2,6 +2,7 @@ package countnondiv
 
 import "math/rand"
 
+// https://app.codility.com/programmers/lessons/11-sieve_of_eratosthenes/count_non_divisible/
 func Solution(A []int) []int {
 	aSize := len(A)
 	maxValue := A[0]
@@ -24,6 +25,7 @@ func Solution(A []int) []int {
 	}
 	cachedResultMap := make([]int, maxValue+1)
 	alreadyCalculated := make([]int, maxValue+1)
+	alreadyCalculatedDuplicated := make([]int, maxValue+1)
 	caluclatedMap := make(map[int][]int)
 	for idx := 0; idx < aSize; idx++ {
 		element := A[idx]
@@ -43,12 +45,14 @@ func Solution(A []int) []int {
 				}
 			}
 			alreadyCalculated[element] = 1
-		} else {
+		} else if alreadyCalculatedDuplicated[element] == 0 {
+			multiplier := aSize - (remainDividersCountList[element] + 1)
 			list := caluclatedMap[element]
 			for repIdx := 0; repIdx < len(list); repIdx++ {
 				repElem := list[repIdx]
-				cachedResultMap[repElem] = cachedResultMap[repElem] + 1
+				cachedResultMap[repElem] = cachedResultMap[repElem] + (1 * multiplier)
 			}
+			alreadyCalculatedDuplicated[element] = 1
 		}
 	}
 
