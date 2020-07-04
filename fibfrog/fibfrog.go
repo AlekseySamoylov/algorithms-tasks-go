@@ -1,19 +1,13 @@
 package fibfrog
 
-import "sort"
+import (
+	"fmt"
+	"sort"
+)
+
+var cacheResults = make(map[string]int)
 
 func Solution(A []int) int {
-	length := len(A)
-
-	if isItFibonachi(length) {
-		return 1
-	} else {
-
-	}
-	return -1
-}
-
-func SolutionRecursive(A []int) int {
 	possibleStack := NewStack()
 	for idx := 0; idx <= len(A); idx++ {
 		// add possibles until finish
@@ -29,13 +23,21 @@ func SolutionRecursive(A []int) int {
 				if possibleStack.isEmpty() {
 					return -1
 				}
-				results := []int{}
+				var results []int
 				for !possibleStack.isEmpty() {
-					tailOfArray := A[possibleStack.pop()+1 : len(A)] // first inclusive, second exclusive
-					result := Solution(tailOfArray)
-					if result != -1 {
-						results = append(results, result)
-
+					tailOfArray := A[possibleStack.pop()+1:] // first inclusive, second exclusive
+					keyToSearch := arrayToString(tailOfArray)
+					cachedResult := cacheResults[keyToSearch]
+					if cachedResult != 0 {
+						if cachedResult != -1 {
+							results = append(results, cachedResult)
+						}
+					} else {
+						result := Solution(tailOfArray)
+						cacheResults[keyToSearch] = result
+						if result != -1 {
+							results = append(results, result)
+						}
 					}
 				}
 				if len(results) == 0 {
@@ -50,6 +52,10 @@ func SolutionRecursive(A []int) int {
 	}
 
 	return -1
+}
+
+func arrayToString(arr []int) string {
+	return fmt.Sprint(arr)
 }
 
 func isItFibonachi(value int) bool {
