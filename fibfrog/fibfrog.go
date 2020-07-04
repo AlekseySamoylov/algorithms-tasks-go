@@ -87,30 +87,26 @@ func binarySearch(needle int, haystack []int) bool {
 
 type Stack struct {
 	data []int
-	idx  int
 }
 
 func NewStack() *Stack {
 	return &Stack{
-		make([]int, 100000),
-		-1,
+		make([]int, 0),
 	}
 }
 
 func (s *Stack) pop() int {
-	if s.idx == -1 {
-		return -1
-	}
-	value := s.data[s.idx]
-	s.idx = s.idx - 1
-	return value
+	lastStackElemIdx := len(s.data) - 1
+	stackElement := s.data[lastStackElemIdx]
+	s.data = s.data[:lastStackElemIdx]
+	return stackElement
 }
 
 func (s *Stack) push(value int) {
-	s.idx = s.idx + 1
-	s.data[s.idx] = value
+	s.data = append(s.data, value)
+
 }
 
 func (s *Stack) isEmpty() bool {
-	return s.idx == -1
+	return len(s.data) == 0
 }
